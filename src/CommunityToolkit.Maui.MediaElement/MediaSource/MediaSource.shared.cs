@@ -55,6 +55,21 @@ public abstract class MediaSource : Element
 	public static MediaSource FromFile(string? path) => new FileMediaSource { Path = path };
 
 	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="stream"></param>
+	/// <param name="contentType"></param>
+	/// <returns></returns>
+	public static MediaSource FromStream(Stream stream, string contentType) => new StreamMediaSource()
+	{
+		ContentType = contentType,
+
+#if WINDOWS
+		Stream = stream.AsRandomAccessStream()
+#endif
+	};
+
+	/// <summary>
 	/// Creates a <see cref="UriMediaSource"/> from an absolute URI.
 	/// </summary>
 	/// <param name="uri">Absolute URI to load.</param>

@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
 using Microsoft.Extensions.Logging;
+using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.Media.Streaming.Adaptive;
 using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.System.Display;
 using WindowsMediaElement = Windows.Media.Playback.MediaPlayer;
 using WinMediaSource = Windows.Media.Core.MediaSource;
@@ -265,6 +268,16 @@ partial class MediaManager : IDisposable
 			if (!string.IsNullOrWhiteSpace(path))
 			{
 				Player.Source = WinMediaSource.CreateFromUri(new Uri(path));
+			}
+		}
+		else if (MediaElement.Source is StreamMediaSource streamMediaSource)
+		{
+			var stream = streamMediaSource.Stream;
+			var contentType = streamMediaSource.ContentType;
+
+			if (stream is not null && !string.IsNullOrEmpty(contentType))
+			{
+				Player.Source = WinMediaSource.CreateFromStream(stream, contentType);
 			}
 		}
 	}

@@ -151,10 +151,15 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
 	async void ChangeSourceClicked(System.Object sender, System.EventArgs e)
 	{
 		var result = await DisplayActionSheet("Choose a source", "Cancel", null,
-			loadOnlineMp4, loadHls, loadLocalResource, resetSource);
+			loadOnlineMp4, loadHls, loadLocalResource, resetSource, "Stream");
 
 		switch (result)
 		{
+#if WINDOWS
+			case "Stream":
+				mediaElement.Source = MediaSource.FromStream(File.OpenRead(@"{put file path here}"), "video/mp4");
+				break;
+#endif
 			case loadOnlineMp4:
 				mediaElement.Source =
 					MediaSource.FromUri(
